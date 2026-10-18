@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "cHbmNNGP+yY=",
+  "success": true,
+  "projectFilePath": "/home/udesik/Documents/Scripts/WhatMakesMeSad/WhatMakesMeSad.csproj",
+  "expectedPackageFiles": [
+    "/home/udesik/.nuget/packages/microsoft.aspnetcore.app.ref/10.0.12/microsoft.aspnetcore.app.ref.10.0.12.nupkg.sha512"
+  ],
+  "logs": []
+}

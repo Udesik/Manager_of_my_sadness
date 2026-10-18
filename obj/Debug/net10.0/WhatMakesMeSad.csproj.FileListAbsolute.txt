@@ -1,0 +1,14 @@
+/home/udesik/Documents/Scripts/WhatMakesMeSad/bin/Debug/net10.0/WhatMakesMeSad
+/home/udesik/Documents/Scripts/WhatMakesMeSad/bin/Debug/net10.0/WhatMakesMeSad.deps.json
+/home/udesik/Documents/Scripts/WhatMakesMeSad/bin/Debug/net10.0/WhatMakesMeSad.runtimeconfig.json
+/home/udesik/Documents/Scripts/WhatMakesMeSad/bin/Debug/net10.0/WhatMakesMeSad.dll
+/home/udesik/Documents/Scripts/WhatMakesMeSad/bin/Debug/net10.0/WhatMakesMeSad.pdb
+/home/udesik/Documents/Scripts/WhatMakesMeSad/obj/Debug/net10.0/WhatMakesMeSad.GeneratedMSBuildEditorConfig.editorconfig
+/home/udesik/Documents/Scripts/WhatMakesMeSad/obj/Debug/net10.0/WhatMakesMeSad.AssemblyInfoInputs.cache
+/home/udesik/Documents/Scripts/WhatMakesMeSad/obj/Debug/net10.0/WhatMakesMeSad.AssemblyInfo.cs
+/home/udesik/Documents/Scripts/WhatMakesMeSad/obj/Debug/net10.0/WhatMakesMeSad.csproj.CoreCompileInputs.cache
+/home/udesik/Documents/Scripts/WhatMakesMeSad/obj/Debug/net10.0/WhatMakesMeSad.dll
+/home/udesik/Documents/Scripts/WhatMakesMeSad/obj/Debug/net10.0/refint/WhatMakesMeSad.dll
+/home/udesik/Documents/Scripts/WhatMakesMeSad/obj/Debug/net10.0/WhatMakesMeSad.pdb
+/home/udesik/Documents/Scripts/WhatMakesMeSad/obj/Debug/net10.0/WhatMakesMeSad.genruntimeconfig.cache
+/home/udesik/Documents/Scripts/WhatMakesMeSad/obj/Debug/net10.0/ref/WhatMakesMeSad.dll
