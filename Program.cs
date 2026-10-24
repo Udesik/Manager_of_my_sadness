@@ -1,20 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
 using System.Text.Json;
-using System.Runtime.InteropServices;
+using System.Text.Json.Serialization;
 using System.Threading;
+using System.Threading.Tasks;
 
 class Program
 {
-    static void Main()
+    static async Task Main()
     {
         Collector collector = new Collector();
-        Viewer viewer = new Viewer(collector);
+        await collector.InitializeAsync();
 
-        viewer.Start();
+        Viewer viewer = new Viewer(collector);
+        await viewer.StartAsync();
     }
 }
 
@@ -25,7 +25,7 @@ public class Viewer
     private const string CommandShow = "Show";
     private const string CommandExite = "Exite";
 
-    private Collector _collector;
+    private readonly Collector _collector;
     private bool _isWork = true;
 
     public Viewer(Collector collector)
@@ -33,11 +33,11 @@ public class Viewer
         _collector = collector;
     }
 
-    public void Start()
+    public async Task StartAsync()
     {
         while (_isWork)
         {
-            Console.WriteLine("Введите команду из нане существующих:");
+            Console.WriteLine("Введите команду из ныне существующих:");
             Console.WriteLine($"{CommandAdd} - добавить грусть");
             Console.WriteLine($"{CommandDelete} - преодолеть или смириться с грустью");
             Console.WriteLine($"{CommandShow} - показать все грусти");
@@ -50,11 +50,11 @@ public class Viewer
             switch (command)
             {
                 case CommandAdd:
-                    _collector.Add();
+                    await _collector.AddAsync();
                     break;
 
                 case CommandDelete:
-                    _collector.Delete();
+                    await _collector.DeleteAsync();
                     break;
 
                 case CommandShow:
@@ -72,21 +72,22 @@ public class Viewer
                     break;
             }
 
-            Thread.Sleep(3000);
+            await Task.Delay(3000);
+            Console.Clear();
         }
     }
 }
 
 public class Collector
 {
-    private List<Problem> _myProblem;
+    private List<Problem> _myProblem = new List<Problem>();
 
-    public Collector()
+    public async Task InitializeAsync()
     {
-        _myProblem = Tools.Load();
+        _myProblem = await Tools.LoadAsync();
     }
 
-    public void Add()
+    public async Task AddAsync()
     {
         Console.Write("Введите описание для вашей грусти: ");
         string description = Console.ReadLine();
@@ -94,10 +95,10 @@ public class Collector
         _myProblem.Add(new Problem(DateOnly.FromDateTime(DateTime.Today), description));
         Console.WriteLine("Вы добавили новую грусть :(");
 
-        Tools.Save(_myProblem);
+        await Tools.SaveAsync(_myProblem);
     }
 
-    public void Delete()
+    public async Task DeleteAsync()
     {
         if (_myProblem.Count == 0)
         {
@@ -121,7 +122,7 @@ public class Collector
                 _myProblem.RemoveAt(index);
                 Console.WriteLine("Грусть была преодолена или стала частью тебя");
 
-                Tools.Save(_myProblem);
+                await Tools.SaveAsync(_myProblem);
             }
             else
             {
@@ -177,13 +178,14 @@ public static class Tools
         PropertyNameCaseInsensitive = true
     };
 
-    public static void Save(List<Problem> problems)
+    public static async Task SaveAsync(List<Problem> problems)
     {
         try
         {
-            string jsonString = JsonSerializer.Serialize(problems, _options);
-
-            File.WriteAllText(FilePath, jsonString);
+            using (FileStream createStream = File.Create(FilePath))
+            {
+                await JsonSerializer.SerializeAsync(createStream, problems, _options);
+            }
             Console.WriteLine("Все грусти успешно сохранены");
         }
         catch (Exception ex)
@@ -192,7 +194,7 @@ public static class Tools
         }
     }
 
-    public static List<Problem> Load()
+    public static async Task<List<Problem>> LoadAsync()
     {
         try
         {
@@ -201,18 +203,20 @@ public static class Tools
                 Console.WriteLine("Валера кто-то забрал твои проблемы теперь у тебя их нет)))");
                 Console.WriteLine("......Была загружена база данных без проблем......");
 
-                File.WriteAllText(FilePath, "[]");
+                await File.WriteAllTextAsync(FilePath, "[]");
                 return new List<Problem>();
             }
 
-            string jsonString = File.ReadAllText(FilePath);
+            using (FileStream openStream = File.OpenRead(FilePath))
+            {
+                Console.WriteLine("......Была загружена база данных c проблемами......");
+                Console.WriteLine("А что если мы прошепчем: <<Мне больно смотреть на тебя Артас>>");
 
-            Console.WriteLine("......Была загружена базза данных c проблемами......");
-            Console.WriteLine("А что если мы прошепчем: <<Мне больно смотреть на тебя Артас>>");
-
-            return JsonSerializer.Deserialize<List<Problem>>(jsonString, _options) ?? new List<Problem>();
+                var result = await JsonSerializer.DeserializeAsync<List<Problem>>(openStream, _options);
+                return result ?? new List<Problem>();
+            }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine($"Валера кто-то забрал твои проблемы теперь у тебя их нет)))  {ex.Message}");
             Console.WriteLine("......Была загружена база данных без проблем......");
